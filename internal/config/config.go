@@ -8,7 +8,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type config struct {
+type Config struct {
 	DbUrlMigration string `env:"DATABASE_URL"`
 	DBPort         string `env:"DB_PORT"`
 	DBUser         string `env:"DB_USER"`
@@ -19,7 +19,7 @@ type config struct {
 	Port           string `env:"PORT"`
 }
 
-func LoadConfig() (*config, error) {
+func LoadConfig() (*Config, error) {
 	err := godotenv.Load()
 
 	if err != nil {
@@ -28,7 +28,7 @@ func LoadConfig() (*config, error) {
 
 	log.Println("config loaded")
 
-	return &config{
+	return &Config{
 		DbUrlMigration: os.Getenv("DATABASE_URL"),
 		DBPort:         os.Getenv("DB_PORT"),
 		DBUser:         os.Getenv("DB_USER"),
