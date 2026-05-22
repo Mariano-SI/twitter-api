@@ -1,0 +1,15 @@
+-- migrate:up
+CREATE TABLE IF NOT EXISTS posts (
+    id CHAR(36) PRIMARY KEY,
+    user_id CHAR(36) NOT NULL,
+    content LONGTEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL,
+    CONSTRAINT fk_posts_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+
+-- migrate:down
+
+DROP TABLE IF EXISTS posts;
