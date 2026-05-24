@@ -6,14 +6,14 @@ import (
 )
 
 type Handler struct {
-	api         *gin.Engine
+	api         gin.IRoutes
 	userService user.UserService
 }
 
-func NewHandler(api *gin.Engine, userService user.UserService) *Handler {
+func NewHandler(api gin.IRoutes, userService user.UserService) *Handler {
 	return &Handler{api: api, userService: userService}
 }
 
-func (h *Handler) RouteList(){
-
+func (h *Handler) RouteList() {
+	h.api.POST("/users", h.Register)
 }
