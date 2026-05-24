@@ -3,6 +3,8 @@ package dto
 import (
 	"errors"
 	"strings"
+
+	"github.com/badoux/checkmail"
 )
 
 type RegisterUserDto struct {
@@ -21,6 +23,9 @@ func (d RegisterUserDto) Validate() error {
 	}
 	if d.Password == "" {
 		return errors.New("password is required")
+	}
+	if err := checkmail.ValidateFormat(d.Email); err != nil {
+		return errors.New("invalid email")
 	}
 	return nil
 }
