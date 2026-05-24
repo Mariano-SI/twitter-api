@@ -1,8 +1,15 @@
 package user
 
-import "database/sql"
+import (
+	"context"
+	"database/sql"
+
+	"github.com/Mariano-SI/twitter-api/internal/model"
+)
 
 type UserRepository interface {
+	Create(ctx context.Context, user *model.UserModel) (error)
+	GetUserByUsernameOrEmail(ctx context.Context, email, username string) (*model.UserModel, error)
 }
 
 type userRepository struct {
