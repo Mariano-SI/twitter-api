@@ -7,6 +7,7 @@ import (
 
 	"github.com/Mariano-SI/twitter-api/internal/config"
 	userHandler "github.com/Mariano-SI/twitter-api/internal/handler/user"
+	refreshToken "github.com/Mariano-SI/twitter-api/internal/repository/refresh_token"
 	userRepository "github.com/Mariano-SI/twitter-api/internal/repository/user"
 	userService "github.com/Mariano-SI/twitter-api/internal/service/user"
 	"github.com/Mariano-SI/twitter-api/pkg/internalSql"
@@ -40,7 +41,8 @@ func main() {
 	})
 
 	userRepository := userRepository.NewRepository(db)
-	userService := userService.NewService(config, userRepository)
+	refreshTokenRepository := refreshToken.NewRepository(db)
+	userService := userService.NewService(config, userRepository, refreshTokenRepository)
 	userHandler := userHandler.NewHandler(v1, userService)
 
 	userHandler.RouteList()
