@@ -17,4 +17,5 @@ func NewHandler(api gin.IRouter, userService user.UserService) *Handler {
 func (h *Handler) RouteList() {
 	auth := h.api.Group("/auth")
 	auth.POST("/register", h.Register)
+	auth.POST("/login", h.Login)
 }
