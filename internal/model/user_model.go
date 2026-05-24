@@ -32,3 +32,7 @@ func NewUserModel(email, username, password string) (*UserModel, error) {
 		UpdatedAt: now,
 	}, nil
 }
+
+func (u *UserModel) ComparePassword(plain string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(plain)) == nil
+}
