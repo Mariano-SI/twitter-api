@@ -31,7 +31,9 @@ func main() {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	r.GET("/hello", func(ctx *gin.Context) {
+	v1 := r.Group("/v1")
+
+	v1.GET("/hello", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"message": "it's works",
 		})
@@ -39,7 +41,7 @@ func main() {
 
 	userRepository := userRepository.NewRepository(db)
 	userService := userService.NewService(config, userRepository)
-	userHandler := userHandler.NewHandler(r, userService)
+	userHandler := userHandler.NewHandler(v1, userService)
 
 	userHandler.RouteList()
 
