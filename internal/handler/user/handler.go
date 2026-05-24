@@ -6,14 +6,15 @@ import (
 )
 
 type Handler struct {
-	api         gin.IRoutes
+	api         gin.IRouter
 	userService user.UserService
 }
 
-func NewHandler(api gin.IRoutes, userService user.UserService) *Handler {
+func NewHandler(api gin.IRouter, userService user.UserService) *Handler {
 	return &Handler{api: api, userService: userService}
 }
 
 func (h *Handler) RouteList() {
-	h.api.POST("/users", h.Register)
+	auth := h.api.Group("/auth")
+	auth.POST("/register", h.Register)
 }
