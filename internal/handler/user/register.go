@@ -3,7 +3,7 @@ package user
 import (
 	"net/http"
 
-	"github.com/Mariano-SI/twitter-api/internal/dto"
+	userDto "github.com/Mariano-SI/twitter-api/internal/dto/user"
 	"github.com/Mariano-SI/twitter-api/internal/handler/httperror"
 	"github.com/gin-gonic/gin"
 )
@@ -11,7 +11,7 @@ import (
 func (h *Handler) Register(c *gin.Context) {
 	var (
 		ctx = c.Request.Context()
-		req dto.RegisterUserDto
+		req userDto.RegisterUserDto
 	)
 
 	if err := c.ShouldBindBodyWithJSON(&req); err != nil {

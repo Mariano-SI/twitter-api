@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"github.com/Mariano-SI/twitter-api/internal/config"
-	"github.com/Mariano-SI/twitter-api/internal/dto"
+	userDto "github.com/Mariano-SI/twitter-api/internal/dto/user"
 	"github.com/Mariano-SI/twitter-api/internal/repository/user"
 )
 
 type UserService interface {
-	Register(ctx context.Context, input dto.RegisterUserDto) (*dto.RegisterUserResponseDto, error)
+	Register(ctx context.Context, input userDto.RegisterUserDto) (*userDto.RegisterUserResponseDto, error)
 }
 
 type userService struct {

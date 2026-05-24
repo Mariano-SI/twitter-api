@@ -9,7 +9,7 @@ import (
 	userHandler "github.com/Mariano-SI/twitter-api/internal/handler/user"
 	userRepository "github.com/Mariano-SI/twitter-api/internal/repository/user"
 	userService "github.com/Mariano-SI/twitter-api/internal/service/user"
-	"github.com/Mariano-SI/twitter-api/pkg/internalsql"
+	"github.com/Mariano-SI/twitter-api/pkg/internalSql"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	db, err := internalsql.ConnectMySQL(config.DBUser, config.DBPassword, config.DBHost, config.DBPort, config.DBName)
+	db, err := internalSql.ConnectMySQL(config.DBUser, config.DBPassword, config.DBHost, config.DBPort, config.DBName)
 
 	if err != nil {
 		log.Fatal(err)

@@ -1,4 +1,4 @@
-package internalsql
+package internalSql
 
 import (
 	"database/sql"

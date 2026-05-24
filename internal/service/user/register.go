@@ -3,12 +3,12 @@ package user
 import (
 	"context"
 
-	"github.com/Mariano-SI/twitter-api/internal/dto"
+	userDto "github.com/Mariano-SI/twitter-api/internal/dto/user"
 	apperrors "github.com/Mariano-SI/twitter-api/internal/errors"
 	"github.com/Mariano-SI/twitter-api/internal/model"
 )
 
-func (us *userService) Register(ctx context.Context, input dto.RegisterUserDto) (*dto.RegisterUserResponseDto, error) {
+func (us *userService) Register(ctx context.Context, input userDto.RegisterUserDto) (*userDto.RegisterUserResponseDto, error) {
 
 	if input.Password != input.PasswordConfirm {
 		return nil, apperrors.ErrPasswordMismatch
@@ -33,7 +33,7 @@ func (us *userService) Register(ctx context.Context, input dto.RegisterUserDto) 
 		return nil, err
 	}
 
-	return &dto.RegisterUserResponseDto{
+	return &userDto.RegisterUserResponseDto{
 		ID: user.ID,
 	}, nil
 }
