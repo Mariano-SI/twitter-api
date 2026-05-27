@@ -29,14 +29,16 @@ func main() {
 		log.Fatal(err)
 	}
 
+	defer db.Close()
+
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
 	v1 := r.Group("/v1")
 
-	v1.GET("/hello", func(ctx *gin.Context) {
+	v1.GET("/ping", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
-			"message": "it's works",
+			"message": "pong",
 		})
 	})
 

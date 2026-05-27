@@ -13,7 +13,6 @@ import (
 const refreshTokenTTL = 7 * 24 * time.Hour
 
 func (us *userService) Login(ctx context.Context, input userDto.LoginUserDto) (*userDto.LoginUserResponseDto, error) {
-	//checkar se o user existe
 	user, err := us.userRepository.GetUserByUsernameOrEmail(ctx, input.Email, "")
 
 	if err != nil {
