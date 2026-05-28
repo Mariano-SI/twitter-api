@@ -8,8 +8,9 @@ import (
 )
 
 type UserRepository interface {
-	Create(ctx context.Context, user *model.UserModel) (error)
+	Create(ctx context.Context, user *model.UserModel) error
 	GetUserByUsernameOrEmail(ctx context.Context, email, username string) (*model.UserModel, error)
+	GetUserById(ctx context.Context, userId string) (*model.UserModel, error)
 }
 
 type userRepository struct {

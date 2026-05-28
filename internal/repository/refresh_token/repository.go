@@ -11,6 +11,7 @@ import (
 type RefreshTokenRepository interface {
 	GetRefreshToken(ctx context.Context, userId string, now time.Time) (*model.RefreshTokenModel, error)
 	Create(ctx context.Context, refreshToken *model.RefreshTokenModel) error
+	Delete(ctx context.Context, tokenId string) error
 }
 
 type refreshTokenRepository struct {
