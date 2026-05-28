@@ -7,4 +7,5 @@ var (
 	ErrEmailOrUsernameAlreadyTaken = stderrors.New("email or username already taken")
 	ErrPasswordMismatch            = stderrors.New("password and password confirmation do not match")
 	ErrInvalidCredentials          = stderrors.New("invalid email or password")
+	ErrInvalidRefreshToken = stderrors.New("invalid or expired refresh token")
 )

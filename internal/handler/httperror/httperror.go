@@ -18,7 +18,7 @@ func FromError(err error) (int, string) {
 		return http.StatusConflict, err.Error()
 	case errors.Is(err, apperrors.ErrPasswordMismatch):
 		return http.StatusBadRequest, err.Error()
-	case errors.Is(err, apperrors.ErrInvalidCredentials):
+	case errors.Is(err, apperrors.ErrInvalidCredentials), errors.Is(err, apperrors.ErrInvalidRefreshToken):
 		return http.StatusUnauthorized, err.Error()
 	default:
 		log.Printf("unhandled error: %v", err)
