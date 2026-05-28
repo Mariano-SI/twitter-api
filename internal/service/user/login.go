@@ -44,7 +44,7 @@ func (us *userService) Login(ctx context.Context, input userDto.LoginUserDto) (*
 		}, nil
 	}
 
-	newRefreshToken := model.NewRefreshTokenModel(user.ID, refreshTokenTTL)
+	newRefreshToken := model.NewRefreshTokenModel(user.ID, us.cfg.RefreshTokenTTL)
 	if err := us.refreshTokenRepository.Create(ctx, newRefreshToken); err != nil {
 		return nil, err
 	}
