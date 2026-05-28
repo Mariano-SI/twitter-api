@@ -2,3 +2,5 @@
 .claude/
 /docs
 frontend/
+__debug_bin*
+*.exe
