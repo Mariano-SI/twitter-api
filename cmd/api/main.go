@@ -47,7 +47,7 @@ func main() {
 	userService := userService.NewService(config, userRepository, refreshTokenRepository)
 	userHandler := userHandler.NewHandler(v1, userService)
 
-	userHandler.RouteList()
+	userHandler.RouteList(config.JwtSecret)
 
 	server := fmt.Sprintf("127.0.0.1:%s", config.Port)
 	r.Run(server)
