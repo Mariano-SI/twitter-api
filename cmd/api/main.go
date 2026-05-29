@@ -12,6 +12,10 @@ import (
 	userService "github.com/Mariano-SI/twitter-api/internal/service/user"
 	"github.com/Mariano-SI/twitter-api/pkg/internalSql"
 	"github.com/gin-gonic/gin"
+
+	postHandler "github.com/Mariano-SI/twitter-api/internal/handler/post"
+	postRepository "github.com/Mariano-SI/twitter-api/internal/repository/post"
+	postService "github.com/Mariano-SI/twitter-api/internal/service/post"
 )
 
 func main() {
@@ -43,10 +47,16 @@ func main() {
 	})
 
 	userRepository := userRepository.NewRepository(db)
+	postRepository := postRepository.NewRepository(db)
 	refreshTokenRepository := refreshToken.NewRepository(db)
+
+	postService := postService.NewService(postRepository)
 	userService := userService.NewService(config, userRepository, refreshTokenRepository)
+
+	postHandler := postHandler.NewHandler(v1, postService)
 	userHandler := userHandler.NewHandler(v1, userService)
 
+	postHandler.RouteList(config.JwtSecret)
 	userHandler.RouteList(config.JwtSecret)
 
 	server := fmt.Sprintf("127.0.0.1:%s", config.Port)

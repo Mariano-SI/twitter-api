@@ -10,10 +10,13 @@ type CreatePostDto struct {
 }
 
 func (c *CreatePostDto) Validate() error {
-	if strings.TrimSpace(c.Content) == ""{
+	if strings.TrimSpace(c.Content) == "" {
 		return errors.New("content is required")
 	}
-	
+	if len(c.Content) > 280 {
+		return errors.New("content exceeds 280 characters")
+	}
+
 	return nil
 }
 
