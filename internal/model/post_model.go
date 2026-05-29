@@ -15,7 +15,7 @@ type PostModel struct {
 	DeletedAt *time.Time
 }
 
-func NewPostModel(userId, content string) (*PostModel, error) {
+func NewPostModel(userId, content string) (*PostModel) {
 	now := time.Now()
 	return &PostModel{
 		ID:        uuid.NewString(),
@@ -23,5 +23,5 @@ func NewPostModel(userId, content string) (*PostModel, error) {
 		UserId:    userId,
 		CreatedAt: now,
 		UpdatedAt: now,
-	}, nil
+	}
 }
