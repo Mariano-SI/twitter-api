@@ -4,6 +4,7 @@ import (
 	"context"
 
 	postDto "github.com/Mariano-SI/twitter-api/internal/dto/post"
+	"github.com/Mariano-SI/twitter-api/internal/infra/storage"
 	postRepository "github.com/Mariano-SI/twitter-api/internal/repository/post"
 )
 
@@ -13,8 +14,12 @@ type PostService interface {
 
 type postService struct {
 	postRepository postRepository.PostRepository
+	imageStorage   storage.Storage
 }
 
-func NewService(postRepository postRepository.PostRepository) PostService {
-	return &postService{postRepository: postRepository}
+func NewService(postRepository postRepository.PostRepository, imageStorage storage.Storage) PostService {
+	return &postService{
+		postRepository: postRepository,
+		imageStorage:   imageStorage,
+	}
 }

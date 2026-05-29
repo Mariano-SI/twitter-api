@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -11,9 +12,11 @@ import (
 	userRepository "github.com/Mariano-SI/twitter-api/internal/repository/user"
 	userService "github.com/Mariano-SI/twitter-api/internal/service/user"
 	"github.com/Mariano-SI/twitter-api/pkg/internalSql"
+	"github.com/Mariano-SI/twitter-api/pkg/r2"
 	"github.com/gin-gonic/gin"
 
 	postHandler "github.com/Mariano-SI/twitter-api/internal/handler/post"
+	r2storage "github.com/Mariano-SI/twitter-api/internal/infra/storage/r2"
 	postRepository "github.com/Mariano-SI/twitter-api/internal/repository/post"
 	postService "github.com/Mariano-SI/twitter-api/internal/service/post"
 )
@@ -35,6 +38,17 @@ func main() {
 
 	defer db.Close()
 
+	r2Client, err := r2.NewClient(
+		context.Background(),
+		config.R2AccountID,
+		config.R2AccessKeyID,
+		config.R2SecretAccessKey,
+	)
+	
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
@@ -50,7 +64,9 @@ func main() {
 	postRepository := postRepository.NewRepository(db)
 	refreshTokenRepository := refreshToken.NewRepository(db)
 
-	postService := postService.NewService(postRepository)
+	imageStorage := r2storage.NewStorage(r2Client, config.R2Bucket, config.R2PublicURL)
+
+	postService := postService.NewService(postRepository, imageStorage)
 	userService := userService.NewService(config, userRepository, refreshTokenRepository)
 
 	postHandler := postHandler.NewHandler(v1, postService)
