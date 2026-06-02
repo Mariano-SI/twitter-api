@@ -6,6 +6,8 @@ import (
 	postDto "github.com/Mariano-SI/twitter-api/internal/dto/post"
 	"github.com/Mariano-SI/twitter-api/internal/infra/storage"
 	postRepository "github.com/Mariano-SI/twitter-api/internal/repository/post"
+	postImageRepository "github.com/Mariano-SI/twitter-api/internal/repository/post_image"
+	"github.com/Mariano-SI/twitter-api/pkg/internalSql"
 )
 
 type PostService interface {
@@ -13,13 +15,22 @@ type PostService interface {
 }
 
 type postService struct {
-	postRepository postRepository.PostRepository
-	imageStorage   storage.Storage
+	transactor          internalSql.Transactor
+	postRepository      postRepository.PostRepository
+	postImageRepository postImageRepository.PostImageRepository
+	imageStorage        storage.Storage
 }
 
-func NewService(postRepository postRepository.PostRepository, imageStorage storage.Storage) PostService {
+func NewService(
+	transactor internalSql.Transactor,
+	postRepository postRepository.PostRepository,
+	postImageRepository postImageRepository.PostImageRepository,
+	imageStorage storage.Storage,
+) PostService {
 	return &postService{
-		postRepository: postRepository,
-		imageStorage:   imageStorage,
+		transactor:          transactor,
+		postRepository:      postRepository,
+		postImageRepository: postImageRepository,
+		imageStorage:        imageStorage,
 	}
 }

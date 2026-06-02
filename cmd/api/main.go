@@ -18,6 +18,7 @@ import (
 	postHandler "github.com/Mariano-SI/twitter-api/internal/handler/post"
 	r2storage "github.com/Mariano-SI/twitter-api/internal/infra/storage/r2"
 	postRepository "github.com/Mariano-SI/twitter-api/internal/repository/post"
+	postImageRepository "github.com/Mariano-SI/twitter-api/internal/repository/post_image"
 	postService "github.com/Mariano-SI/twitter-api/internal/service/post"
 )
 
@@ -62,11 +63,13 @@ func main() {
 
 	userRepository := userRepository.NewRepository(db)
 	postRepository := postRepository.NewRepository(db)
+	postImageRepository := postImageRepository.NewRepository(db)
 	refreshTokenRepository := refreshToken.NewRepository(db)
 
 	imageStorage := r2storage.NewStorage(r2Client, config.R2Bucket, config.R2PublicURL)
+	transactor := internalSql.NewTransactor(db)
 
-	postService := postService.NewService(postRepository, imageStorage)
+	postService := postService.NewService(transactor, postRepository, postImageRepository, imageStorage)
 	userService := userService.NewService(config, userRepository, refreshTokenRepository)
 
 	postHandler := postHandler.NewHandler(v1, postService)
