@@ -9,16 +9,19 @@ import (
 )
 
 func (h *Handler) Create(c *gin.Context) {
-	var (
-		ctx = c.Request.Context()
-		req post.CreatePostDto
-	)
+	ctx := c.Request.Context()
 
-	if err := c.ShouldBindBodyWithJSON(&req); err != nil {
+	form, err := c.MultipartForm()
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": err.Error(),
+			"message": "invalid multipart form",
 		})
 		return
+	}
+
+	req := post.CreatePostDto{
+		Content: c.PostForm("content"),
+		Images:  form.File["images"],
 	}
 
 	if err := req.Validate(); err != nil {
