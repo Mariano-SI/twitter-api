@@ -22,4 +22,5 @@ func (h *Handler) RouteList(secretKey string) {
 	posts := h.api.Group("/posts")
 	posts.Use(middleware.AuthMiddleware(secretKey))
 	posts.POST("/", h.Create)
+	posts.DELETE("/:id", h.Delete)
 }
