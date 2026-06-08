@@ -9,6 +9,8 @@ import (
 
 type PostRepository interface {
 	Create(ctx context.Context, Post *model.PostModel) error
+	GetById(ctx context.Context, postId string) (*model.PostModel, error)
+	Delete(ctx context.Context, postId string)error
 }
 
 type postRepository struct {
