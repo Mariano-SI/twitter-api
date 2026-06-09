@@ -16,10 +16,13 @@ import (
 	"github.com/gin-gonic/gin"
 
 	postHandler "github.com/Mariano-SI/twitter-api/internal/handler/post"
+	postLikeHandler "github.com/Mariano-SI/twitter-api/internal/handler/post_like"
 	r2storage "github.com/Mariano-SI/twitter-api/internal/infra/storage/r2"
 	postRepository "github.com/Mariano-SI/twitter-api/internal/repository/post"
 	postImageRepository "github.com/Mariano-SI/twitter-api/internal/repository/post_image"
+	postLikeRepository "github.com/Mariano-SI/twitter-api/internal/repository/post_like"
 	postService "github.com/Mariano-SI/twitter-api/internal/service/post"
+	postLikeService "github.com/Mariano-SI/twitter-api/internal/service/post_like"
 )
 
 func main() {
@@ -64,6 +67,7 @@ func main() {
 	userRepository := userRepository.NewRepository(db)
 	postRepository := postRepository.NewRepository(db)
 	postImageRepository := postImageRepository.NewRepository(db)
+	postLikeRepository := postLikeRepository.NewRepository(db)
 	refreshTokenRepository := refreshToken.NewRepository(db)
 
 	imageStorage := r2storage.NewStorage(r2Client, config.R2Bucket, config.R2PublicURL)
@@ -71,12 +75,15 @@ func main() {
 
 	postService := postService.NewService(transactor, postRepository, postImageRepository, imageStorage)
 	userService := userService.NewService(config, userRepository, refreshTokenRepository)
+	postLikeService := postLikeService.NewService(postLikeRepository, postRepository)
 
 	postHandler := postHandler.NewHandler(v1, postService)
 	userHandler := userHandler.NewHandler(v1, userService)
+	postLikeHandler := postLikeHandler.NewHandler(v1, postLikeService)
 
 	postHandler.RouteList(config.JwtSecret)
 	userHandler.RouteList(config.JwtSecret)
+	postLikeHandler.RouteList(config.JwtSecret)
 
 	server := fmt.Sprintf("127.0.0.1:%s", config.Port)
 	r.Run(server)
