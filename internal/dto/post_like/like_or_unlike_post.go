@@ -22,11 +22,3 @@ func (l *LikeOrUnlikePostDto) Validate() error {
 type LikeOrUnlikePostResponseDto struct {
 	Message string `json:"message"`
 }
-
-/*
-  1. Busca o post por id — retorna 404 se não existir
-  2. Busca o like existente por (postId, userId)
-  3. Se existir → deleta o like (unlike)
-  4. Se não existir → cria o like
-  5. Retorna uma mensagem indicando a ação executada ("liked" / "unliked")
-*/
