@@ -20,5 +20,5 @@ func (d *DeletePostDto) Validate() error {
 }
 
 type DeletePostResponseDto struct {
-	Message string
+	Message string `json:"message"`
 }
