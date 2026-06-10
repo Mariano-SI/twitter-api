@@ -16,15 +16,18 @@ import (
 	"github.com/gin-gonic/gin"
 
 	commentHandler "github.com/Mariano-SI/twitter-api/internal/handler/comment"
+	commentLikeHandler "github.com/Mariano-SI/twitter-api/internal/handler/comment_like"
 	postHandler "github.com/Mariano-SI/twitter-api/internal/handler/post"
 	postLikeHandler "github.com/Mariano-SI/twitter-api/internal/handler/post_like"
 	r2storage "github.com/Mariano-SI/twitter-api/internal/infra/storage/r2"
 	commentRepository "github.com/Mariano-SI/twitter-api/internal/repository/comment"
 	commentImageRepository "github.com/Mariano-SI/twitter-api/internal/repository/comment_image"
+	commentLikeRepository "github.com/Mariano-SI/twitter-api/internal/repository/comment_like"
 	postRepository "github.com/Mariano-SI/twitter-api/internal/repository/post"
 	postImageRepository "github.com/Mariano-SI/twitter-api/internal/repository/post_image"
 	postLikeRepository "github.com/Mariano-SI/twitter-api/internal/repository/post_like"
 	commentService "github.com/Mariano-SI/twitter-api/internal/service/comment"
+	commentLikeService "github.com/Mariano-SI/twitter-api/internal/service/comment_like"
 	postService "github.com/Mariano-SI/twitter-api/internal/service/post"
 	postLikeService "github.com/Mariano-SI/twitter-api/internal/service/post_like"
 )
@@ -74,6 +77,7 @@ func main() {
 	postLikeRepository := postLikeRepository.NewRepository(db)
 	commentRepository := commentRepository.NewRepository(db)
 	commentImageRepository := commentImageRepository.NewRepository(db)
+	commentLikeRepository := commentLikeRepository.NewRepository(db)
 	refreshTokenRepository := refreshToken.NewRepository(db)
 
 	imageStorage := r2storage.NewStorage(r2Client, config.R2Bucket, config.R2PublicURL)
@@ -83,16 +87,19 @@ func main() {
 	userService := userService.NewService(config, userRepository, refreshTokenRepository)
 	postLikeService := postLikeService.NewService(postLikeRepository, postRepository)
 	commentService := commentService.NewService(transactor, commentRepository, commentImageRepository, postRepository, imageStorage)
+	commentLikeService := commentLikeService.NewService(commentLikeRepository, commentRepository)
 
 	postHandler := postHandler.NewHandler(v1, postService)
 	userHandler := userHandler.NewHandler(v1, userService)
 	postLikeHandler := postLikeHandler.NewHandler(v1, postLikeService)
 	commentHandler := commentHandler.NewHandler(v1, commentService)
+	commentLikeHandler := commentLikeHandler.NewHandler(v1, commentLikeService)
 
 	postHandler.RouteList(config.JwtSecret)
 	userHandler.RouteList(config.JwtSecret)
 	postLikeHandler.RouteList(config.JwtSecret)
 	commentHandler.RouteList(config.JwtSecret)
+	commentLikeHandler.RouteList(config.JwtSecret)
 
 	server := fmt.Sprintf("127.0.0.1:%s", config.Port)
 	r.Run(server)
