@@ -9,5 +9,6 @@ var (
 	ErrInvalidCredentials          = stderrors.New("invalid email or password")
 	ErrInvalidRefreshToken         = stderrors.New("invalid or expired refresh token")
 	ErrPostNotFound                = stderrors.New("post not found")
+	ErrCommentNotFound             = stderrors.New("comment not found")
 	ErrForbidden                   = stderrors.New("forbidden")
 )
