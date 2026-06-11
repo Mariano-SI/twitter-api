@@ -1,65 +1,27 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/Mariano-SI/twitter-api/internal/config"
-	userHandler "github.com/Mariano-SI/twitter-api/internal/handler/user"
-	refreshToken "github.com/Mariano-SI/twitter-api/internal/repository/refresh_token"
-	userRepository "github.com/Mariano-SI/twitter-api/internal/repository/user"
-	userService "github.com/Mariano-SI/twitter-api/internal/service/user"
-	"github.com/Mariano-SI/twitter-api/pkg/internalSql"
-	"github.com/Mariano-SI/twitter-api/pkg/r2"
-	"github.com/gin-gonic/gin"
-
+	"github.com/Mariano-SI/twitter-api/internal/app"
 	commentHandler "github.com/Mariano-SI/twitter-api/internal/handler/comment"
 	commentLikeHandler "github.com/Mariano-SI/twitter-api/internal/handler/comment_like"
 	postHandler "github.com/Mariano-SI/twitter-api/internal/handler/post"
 	postLikeHandler "github.com/Mariano-SI/twitter-api/internal/handler/post_like"
-	r2storage "github.com/Mariano-SI/twitter-api/internal/infra/storage/r2"
-	commentRepository "github.com/Mariano-SI/twitter-api/internal/repository/comment"
-	commentImageRepository "github.com/Mariano-SI/twitter-api/internal/repository/comment_image"
-	commentLikeRepository "github.com/Mariano-SI/twitter-api/internal/repository/comment_like"
-	postRepository "github.com/Mariano-SI/twitter-api/internal/repository/post"
-	postImageRepository "github.com/Mariano-SI/twitter-api/internal/repository/post_image"
-	postLikeRepository "github.com/Mariano-SI/twitter-api/internal/repository/post_like"
-	commentService "github.com/Mariano-SI/twitter-api/internal/service/comment"
-	commentLikeService "github.com/Mariano-SI/twitter-api/internal/service/comment_like"
-	postService "github.com/Mariano-SI/twitter-api/internal/service/post"
-	postLikeService "github.com/Mariano-SI/twitter-api/internal/service/post_like"
+	userHandler "github.com/Mariano-SI/twitter-api/internal/handler/user"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	deps, err := app.New()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer deps.DB.Close()
+
 	r := gin.Default()
-
-	config, err := config.LoadConfig()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	db, err := internalSql.ConnectMySQL(config.DBUser, config.DBPassword, config.DBHost, config.DBPort, config.DBName)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer db.Close()
-
-	r2Client, err := r2.NewClient(
-		context.Background(),
-		config.R2AccountID,
-		config.R2AccessKeyID,
-		config.R2SecretAccessKey,
-	)
-	
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
@@ -71,36 +33,12 @@ func main() {
 		})
 	})
 
-	userRepository := userRepository.NewRepository(db)
-	postRepository := postRepository.NewRepository(db)
-	postImageRepository := postImageRepository.NewRepository(db)
-	postLikeRepository := postLikeRepository.NewRepository(db)
-	commentRepository := commentRepository.NewRepository(db)
-	commentImageRepository := commentImageRepository.NewRepository(db)
-	commentLikeRepository := commentLikeRepository.NewRepository(db)
-	refreshTokenRepository := refreshToken.NewRepository(db)
+	userHandler.Register(v1, deps)
+	postHandler.Register(v1, deps)
+	postLikeHandler.Register(v1, deps)
+	commentHandler.Register(v1, deps)
+	commentLikeHandler.Register(v1, deps)
 
-	imageStorage := r2storage.NewStorage(r2Client, config.R2Bucket, config.R2PublicURL)
-	transactor := internalSql.NewTransactor(db)
-
-	postService := postService.NewService(transactor, postRepository, postImageRepository, imageStorage)
-	userService := userService.NewService(config, userRepository, refreshTokenRepository)
-	postLikeService := postLikeService.NewService(postLikeRepository, postRepository)
-	commentService := commentService.NewService(transactor, commentRepository, commentImageRepository, postRepository, imageStorage)
-	commentLikeService := commentLikeService.NewService(commentLikeRepository, commentRepository)
-
-	postHandler := postHandler.NewHandler(v1, postService)
-	userHandler := userHandler.NewHandler(v1, userService)
-	postLikeHandler := postLikeHandler.NewHandler(v1, postLikeService)
-	commentHandler := commentHandler.NewHandler(v1, commentService)
-	commentLikeHandler := commentLikeHandler.NewHandler(v1, commentLikeService)
-
-	postHandler.RouteList(config.JwtSecret)
-	userHandler.RouteList(config.JwtSecret)
-	postLikeHandler.RouteList(config.JwtSecret)
-	commentHandler.RouteList(config.JwtSecret)
-	commentLikeHandler.RouteList(config.JwtSecret)
-
-	server := fmt.Sprintf("127.0.0.1:%s", config.Port)
+	server := fmt.Sprintf("127.0.0.1:%s", deps.Config.Port)
 	r.Run(server)
 }
