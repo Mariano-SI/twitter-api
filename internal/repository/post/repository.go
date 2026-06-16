@@ -12,6 +12,7 @@ type PostRepository interface {
 	GetById(ctx context.Context, postId string) (*model.PostModel, error)
 	GetByIdWithDetails(ctx context.Context, postId string) (*model.PostWithDetailsModel, error)
 	GetByUserIdPaginated(ctx context.Context, userId string, limit, offset int) ([]*model.PostSummaryModel, int, error)
+	GetFeed(ctx context.Context, userId string, limit, offset int) ([]*model.PostFeedItemModel, int, error)
 	Delete(ctx context.Context, postId string) error
 }
 
