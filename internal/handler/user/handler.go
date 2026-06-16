@@ -26,5 +26,7 @@ func (h *Handler) RouteList(secretKey string) {
 
 	users := h.api.Group("/users")
 	users.Use(middleware.AuthMiddleware(secretKey))
+	users.GET("/me", h.GetMyProfile)
 	users.PATCH("/me", h.UpdateProfile)
+	users.GET("/:id", h.GetProfile)
 }
