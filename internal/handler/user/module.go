@@ -8,8 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Register wires the user repositories, service and handler, and registers
-// its routes on the given router group.
 func Register(rg gin.IRouter, deps *app.Deps) {
 	userRepo := userRepository.NewRepository(deps.DB)
 	refreshRepo := refreshTokenRepository.NewRepository(deps.DB)
