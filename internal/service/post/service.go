@@ -18,6 +18,7 @@ type PostService interface {
 	GetById(ctx context.Context, input postDto.GetPostByIdDto) (*postDto.GetPostByIdResponseDto, error)
 	GetMyPosts(ctx context.Context, input postDto.GetMyPostsDto, userId string) (*postDto.GetMyPostsResponseDto, error)
 	GetFeed(ctx context.Context, input postDto.GetFeedDto, userId string) (*postDto.GetFeedResponseDto, error)
+	GetUserPosts(ctx context.Context, input postDto.GetMyPostsDto, userId string) (*postDto.GetMyPostsResponseDto, error)
 }
 
 type postService struct {

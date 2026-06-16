@@ -26,4 +26,8 @@ func (h *Handler) RouteList(secretKey string) {
 	posts.GET("/feed", h.GetFeed)
 	posts.DELETE("/:id", h.Delete)
 	posts.GET("/:id", h.GetById)
+
+	users := h.api.Group("/users")
+	users.Use(middleware.AuthMiddleware(secretKey))
+	users.GET("/:id/posts", h.GetUserPosts)
 }
