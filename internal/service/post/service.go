@@ -17,6 +17,7 @@ type PostService interface {
 	Delete(ctx context.Context, input postDto.DeletePostDto, userId string) (*postDto.DeletePostResponseDto, error)
 	GetById(ctx context.Context, input postDto.GetPostByIdDto) (*postDto.GetPostByIdResponseDto, error)
 	GetMyPosts(ctx context.Context, input postDto.GetMyPostsDto, userId string) (*postDto.GetMyPostsResponseDto, error)
+	GetFeed(ctx context.Context, input postDto.GetFeedDto, userId string) (*postDto.GetFeedResponseDto, error)
 }
 
 type postService struct {
