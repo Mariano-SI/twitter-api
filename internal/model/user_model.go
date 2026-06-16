@@ -8,12 +8,15 @@ import (
 )
 
 type UserModel struct {
-	ID        string
-	Email     string
-	Username  string
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID                string
+	Email             string
+	Username          string
+	Password          string
+	Description       *string
+	ProfilePictureUrl *string
+	ProfilePictureKey *string
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
 }
 
 func NewUserModel(email, username, password string) (*UserModel, error) {
