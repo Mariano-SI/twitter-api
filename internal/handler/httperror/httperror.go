@@ -22,7 +22,8 @@ func FromError(err error) (int, string) {
 		return http.StatusUnauthorized, err.Error()
 	case errors.Is(err, apperrors.ErrForbidden):
 		return http.StatusForbidden, err.Error()
-	case errors.Is(err, apperrors.ErrCannotFollowSelf):
+	case errors.Is(err, apperrors.ErrCannotFollowSelf),
+		errors.Is(err, apperrors.ErrConflictingProfilePictureAction):
 		return http.StatusBadRequest, err.Error()
 	default:
 		log.Printf("unhandled error: %v", err)
