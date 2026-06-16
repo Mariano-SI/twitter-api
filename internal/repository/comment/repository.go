@@ -9,7 +9,8 @@ import (
 
 type CommentRepository interface {
 	Create(ctx context.Context, comment model.CommentModel) error
-	GetById(ctx context.Context, commentId string)  (*model.CommentModel, error)
+	GetById(ctx context.Context, commentId string) (*model.CommentModel, error)
+	GetByPostIdWithStats(ctx context.Context, postId string) ([]*model.CommentWithStatsModel, error)
 }
 
 type commentRepository struct {

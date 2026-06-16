@@ -9,6 +9,7 @@ import (
 
 type CommentImageRepository interface {
 	Create(ctx context.Context, comment_image model.CommentImageModel) error
+	GetAllByPostId(ctx context.Context, postId string) ([]*model.CommentImageModel, error)
 }
 
 type commentImageRepository struct {

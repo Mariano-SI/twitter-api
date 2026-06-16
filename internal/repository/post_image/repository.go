@@ -10,6 +10,7 @@ import (
 type PostImageRepository interface {
 	Create(ctx context.Context, image *model.PostImageModel) error
 	DeleteImagesByPostId(ctx context.Context, postId string) error
+	GetByPostId(ctx context.Context, postId string) ([]*model.PostImageModel, error)
 }
 
 type postImageRepository struct {
