@@ -8,6 +8,7 @@ import (
 	"github.com/Mariano-SI/twitter-api/internal/app"
 	commentHandler "github.com/Mariano-SI/twitter-api/internal/handler/comment"
 	commentLikeHandler "github.com/Mariano-SI/twitter-api/internal/handler/comment_like"
+	followHandler "github.com/Mariano-SI/twitter-api/internal/handler/follow"
 	postHandler "github.com/Mariano-SI/twitter-api/internal/handler/post"
 	postLikeHandler "github.com/Mariano-SI/twitter-api/internal/handler/post_like"
 	userHandler "github.com/Mariano-SI/twitter-api/internal/handler/user"
@@ -38,6 +39,7 @@ func main() {
 	postLikeHandler.Register(v1, deps)
 	commentHandler.Register(v1, deps)
 	commentLikeHandler.Register(v1, deps)
+	followHandler.Register(v1, deps)
 
 	server := fmt.Sprintf("127.0.0.1:%s", deps.Config.Port)
 	r.Run(server)
