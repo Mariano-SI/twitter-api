@@ -22,6 +22,9 @@ func (h *Handler) RouteList(secretKey string) {
 
 	refreshRoute := h.api.Group("/auth")
 	refreshRoute.Use(middleware.AuthRefreshTokenMiddleware(secretKey))
-
 	refreshRoute.POST("/refresh", h.RefreshToken)
+
+	users := h.api.Group("/users")
+	users.Use(middleware.AuthMiddleware(secretKey))
+	users.PATCH("/me", h.UpdateProfile)
 }

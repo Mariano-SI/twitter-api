@@ -12,7 +12,7 @@ func Register(rg gin.IRouter, deps *app.Deps) {
 	userRepo := userRepository.NewRepository(deps.DB)
 	refreshRepo := refreshTokenRepository.NewRepository(deps.DB)
 
-	svc := userService.NewService(deps.Config, userRepo, refreshRepo)
+	svc := userService.NewService(deps.Config, userRepo, refreshRepo, deps.Storage)
 
 	NewHandler(rg, svc).RouteList(deps.Config.JwtSecret)
 }
