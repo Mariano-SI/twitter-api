@@ -15,6 +15,7 @@ type UserService interface {
 	Login(ctx context.Context, input userDto.LoginUserDto) (*userDto.LoginUserResponseDto, error)
 	RefreshToken(ctx context.Context, input userDto.RefreshTokenDto, userId string) (*userDto.RefreshTokenResponseDto, error)
 	UpdateProfile(ctx context.Context, input userDto.UpdateProfileDto, userId string) (*userDto.UpdateProfileResponseDto, error)
+	GetProfile(ctx context.Context, userId string) (*userDto.GetUserProfileResponseDto, error)
 }
 
 type userService struct {
