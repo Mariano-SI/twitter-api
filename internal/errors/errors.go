@@ -11,4 +11,5 @@ var (
 	ErrPostNotFound                = stderrors.New("post not found")
 	ErrCommentNotFound             = stderrors.New("comment not found")
 	ErrForbidden                   = stderrors.New("forbidden")
+	ErrCannotFollowSelf            = stderrors.New("you cannot follow yourself")
 )
